@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class= "container">
+        <div class="col">
+            <div class="row">
+                <br>
+                <div class="col-6">
+                    <h1>Bienvenido a mi One Page</h1>
+                    <br>
+                    <p>Este es un ejemplo de una página de una sola página </p>
+                </div>
+                <div class="col-6">
+                    <img class="img-fluid" src="https://static.wikia.nocookie.net/bbc49ee0-8023-482a-a707-9670ccd5424c/scale-to-width/755" alt="aqui va una imagen">
+                </div> 
+            </div>
+            <div class="row" id="tarjetas">
+                <div class="card col-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Esta es mi tarjeta por defecto</h5>
+                        <p class="card-text">Este es un texto generico Texto lorem:
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit vitae arcu, euismod libero dignissim nam posuere tellus mus dis himenaeos dapibus, eget senectus suscipit nibh quisque consequat nullam non. Luctus donec aptent congue est pharetra fames et nascetur, nibh pretium augue tristique vehicula facilisis. Donec hac pulvinar molestie viverra praesent purus hendrerit ut eget, volutpat mauris ultrices aenean platea laoreet ante vel, aliquet integer massa venenatis tortor non ac mollis.
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit vitae arcu, euismod libero dignissim nam posuere tellus mus dis himenaeos dapibus, eget senectus suscipit nibh quisque consequat nullam non. Luctus donec aptent congue est pharetra fames et nascetur, nibh pretium augue tristique vehicula facilisis. Donec hac pulvinar molestie viverra praesent purus hendrerit ut eget, volutpat mauris ultrices aenean platea laoreet ante vel, aliquet integer massa venenatis tortor non ac mollis.
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit vitae arcu, euismod libero dignissim nam posuere tellus mus dis himenaeos dapibus, eget senectus suscipit nibh quisque consequat nullam non. Luctus donec aptent congue est pharetra fames et nascetur, nibh pretium augue tristique vehicula facilisis. Donec hac pulvinar molestie viverra praesent purus hendrerit ut eget, volutpat mauris ultrices aenean platea laoreet ante vel, aliquet integer massa venenatis tortor non ac mollis.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //logica para la geneacion de tarjetas
+        function loadCards(title, text){
+            var card = document.createElement('div');
+            card.setAttribute('class', 'card col-4');
+
+            var body = document.createElement('div');
+            body.setAttribute('class', 'card-body');
+
+            var h5 = document.createElement('h5');
+            h5.setAttribute('class', 'card-title');
+            h5.innerHTML = title;
+
+            var p = document.createElement('p');
+            p.setAttribute('class', 'card-text');
+            p.innerHTML = text;
+            
+            body.appendChild(h5);
+            body.appendChild(p);
+            card.appendChild(body);
+
+            document.getElementById('tarjetas').appendChild(card);
+        }
+
+        var i = 1;
+
+        window.addEventListener("scroll", () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10){ 
+                console.log('lo que sea');
+                
+                for (let index = i; index < 100; index++){
+                    if (i > 100){
+                        break;
+                    }
+                    var object = {
+                        title: 'Esta es la card: ' + i,
+                        text: 'Este es el texto generico de la card: ' + i
+                    }
+                    loadCards(object.title, object.text);
+                    i++;
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
