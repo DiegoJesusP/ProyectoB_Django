@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = 'django-insecure-q_^lzj@phl@^nm6x_df2ogt01!-61zvday7io&r44pj=ar3$=*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -136,8 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 HANDLER404 = 'app.views.error_404_view'
 HANDLER500 = 'app.views.error_500_view'
 
-SEARCH_ENGINE_ID = ''
-GOOGLE_API_KEY = ''
+SEARCH_ENGINE_ID = '65688640a35c64018'
+GOOGLE_API_KEY = 'AIzaSyDxbg6YQ0bUfWm8AS5PldYnMItFw4NY8SU'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

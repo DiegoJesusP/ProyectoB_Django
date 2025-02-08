@@ -76,6 +76,7 @@ class CustomUserCreationForm(UserCreationForm):
                 attrs={
                     "class": "form-control",
                     "required": True,
+                    "tittle": "Debes ingresar un número de control válido",
                     "placeholder": "Ingrese su número de control",
                 }
             ),
@@ -83,16 +84,22 @@ class CustomUserCreationForm(UserCreationForm):
                 attrs={
                     "class": "form-control",
                     "required": True,
+                    "pattern": "^[0-9]+$",
+                    "title": "Solo debes ingresar números",
                     "placeholder": "Ingrese su edad",
+                    "max": 100,
+                    "min": 1,
                 }
             ),
             "tel": forms.TextInput(
                 attrs={
                     "class": "form-control",
                     "required": True,
-                    "pattern": "^[0-9]{10}$",
+                    "pattern": "^[0-9\+-]{10,}$",
                     "title": "Debes ingresar un número de teléfono válido",
                     "placeholder": "Ingrese su número de teléfono",
+                    'maxlength': 15,
+                    'minlength': 10,
                 }
             ),
         }
@@ -111,9 +118,10 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_control_number(self):
         control_number = self.cleaned_data.get('control_number')
-        if not re.match(r'^\d{8,10}$', control_number):  # Ajusta el patrón si es necesario
-            raise forms.ValidationError("El número de control debe ser válido.")
+        if not re.match(r'^\d{5}[a-zA-Z]{2}\d{3}$', control_number):
+            raise forms.ValidationError("El número de control debe tener el formato: 5 números, 2 letras, 3 números (Ejemplo: 20223tn059).")
         return control_number
+
 
     def clean_password1(self):
         password = self.cleaned_data.get("password1")
@@ -127,7 +135,7 @@ class CustomUserCreationForm(UserCreationForm):
         if not any(char.isupper() for char in password):
             raise forms.ValidationError("La contraseña debe contener al menos una letra mayúscula.")
         
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        if not re.search(r'[!#$%&?]', password):
             raise forms.ValidationError("La contraseña debe contener al menos un carácter especial (!@#$%^&*...)")
         
         return password
