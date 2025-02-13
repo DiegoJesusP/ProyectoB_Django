@@ -13,13 +13,19 @@ class ProductoForm(forms.ModelForm):
         widgets = {
             'nombre': forms.TextInput(
                 attrs={
-                    'class': 'form-input',
+                    'class': 'form-control',
                     'placeholder': 'Nombre del producto'
                 }),
             'precio': forms.NumberInput(
                 attrs={
-                    'class': 'form-input',
+                    'class': 'form-control',
+                    'placeholder': 'Precio del producto (MXN)'
                 }),
+            'imagen': forms.URLInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'URL de la imagen'
+                })
         }
         
         # Etiquetas

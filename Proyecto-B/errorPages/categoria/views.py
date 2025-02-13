@@ -13,7 +13,7 @@ def registrar_categoria(request):
         # checar que sus datos esten bien
         if form.is_valid():
             form.save()
-            return redirect('ver')
+            return redirect('json_categoria')
     # Que pasa si no fue que mandaron el form
     else:
         form = CategoriaForm()
