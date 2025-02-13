@@ -2,9 +2,22 @@ from django.shortcuts import render, redirect
 from .models import Producto
 from django.http import JsonResponse
 
-#from .forms import ProductoForm
+from .forms import ProductoForm
 
-# Create your views here.
+# Crear una vista que cargue y muestre el formulario
+def agregar_producto(request):
+    #checar si vengo del formulario
+    if request.method == 'POST':
+        #quiere decir que enviaron el form
+        form = ProductoForm(request.POST)
+        #checar que sus datos esten bien
+        if form.is_valid():
+            form.save()
+            return redirect('ver')
+    #Que pasa si no fue que mandaron el form
+    else:
+        form = ProductoForm()
+    return render(request, 'agregar.html', {'form': form})
 
 #Vista que devuelve los productos como JSON
 
