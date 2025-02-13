@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from .forms import CategoriaForm
 
 # vista que carga y muestra el formulario
-def agregar_categoria(request):
+def registrar_categoria(request):
     # checar si vengo del formulario
     if request.method == 'POST':
         # quiere decir que enviaron el form
@@ -17,10 +17,10 @@ def agregar_categoria(request):
     # Que pasa si no fue que mandaron el form
     else:
         form = CategoriaForm()
-    return render(request, 'agregar.html', {'form': form})
+    return render(request, 'registrar.html', {'form': form})
 
 # Vista que devuelve las categorias como JSON
-def lista_categorias(request):
+def lista_categoria(request):
     # Obtener todas las categorias de la base de datos
     categorias = Categoria.objects.all()
     
@@ -29,13 +29,13 @@ def lista_categorias(request):
     data = [
         {
             'nombre': c.nombre,
-            'descripcion': c.descripcion
+            'imagen': c.imagen
         }
         for c in categorias
     ]
     
     return JsonResponse(data, safe=False)
 
-def ver_categorias(request):
-    return render(request, 'ver.html')
+def json_categoria(request):
+    return render(request, 'json.html')
 
