@@ -39,3 +39,28 @@ def lista_categoria(request):
 def json_categoria(request):
     return render(request, 'json.html')
 
+import json
+
+# Funcion que agrega un categoria con un objeto json
+def agregar_categoria(request):
+    if request.method == 'POST':
+        #quiere decir que si estoy manejando el request
+        try:
+            data = json.loads(request.body)
+            categoria = Categoria.objects.create(
+                nombre = data['nombre'],
+                imagen = data['imagen']
+            )
+            return JsonResponse({
+                'mensaje': 'Registro Exitoso',
+                'id': categoria.id
+            }, status=201)
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({
+                'error': str(e)
+            }, status=400)
+    return JsonResponse({
+        'error': 'El metodo no esta doportado'
+    }, status=405)
+    

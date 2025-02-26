@@ -5,41 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Categoria</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-img-top {
+            object-fit: cover;
+            height: 100px;
+        }
+    </style>
 </head>
 <body class="bg-light">
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Registrar Nueva Categoria</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_nombre" class="form-label">Nombre de la Categoria</label>
-                {{ form.nombre }}
-                {% if form.nombre.errors %}
-                    <div class="text-danger">
-                        {% for error in form.nombre.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
 
-            <div class="mb-3">
-                <label for="id_imagen" class="form-label">URL de la imagen</label>
-                {{ form.imagen }}
-                {% if form.imagen.errors %}
-                    <div class="text-danger">
-                        {% for error in form.imagen.errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+    <div class='container'>
+        <div class='col'>
+          <div class='row'>
+            <!-- FORM -->
+            <div class="col-6 mt-4">
+                <h1 class="text-center mb-4">Registrar Nueva Categoria</h1>
+                <form method="post" id='categoriaForm'>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_nombre" class="form-label">Nombre de la Categoria</label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                        <div class="text-danger">
+                            {% for error in form.nombre.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+    
+                <div class="mb-3">
+                    <label for="id_imagen" class="form-label">URL de la imagen</label>
+                    {{ form.imagen }}
+                    {% if form.imagen.errors %}
+                        <div class="text-danger">
+                            {% for error in form.imagen.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'json_categoria' %}" class="btn btn-secondary">Volver</a>
+                    <button type="submit" class="btn btn-primary">Registrar Categoria</button>
+                </div>
+                </form>
             </div>
-            <div class="d-flex justify-content-between">
-                <a href="{% url 'json_categoria' %}" class="btn btn-secondary">Volver</a>
-                <button type="submit" class="btn btn-primary">Registrar Categoria</button>
-            </div>
-        </form>
+            <!-- Vista -->
+            <div class="col-6 mt-4">
+                <h1>Vista de categorias</h1>
+                <div class="row" id="categorias"></div> 
+               </div>
+          </div>
+        </div>
     </div>
+
+    <div class="container mt-5">
+    
+    
+        <p id="mensaje"></p>
+      </div>
+      <script>
+        var form = document.getElementById('categoriaForm');
+        form.addEventListener('submit', function(event){
+          //Que bi se va a mandar el form a la vista que hace render
+          event.preventDefault();
+          //necesito informacion
+          let formData = new FormData(this);
+    
+          //convertir el formData en Json
+          let jsonData = {};
+          //en este contexto el value es el valor del input y el key es el name del input
+          formData.forEach((value, key) => jsonData[key] = value);
+          //'nombre' : 'peluche pikachu'
+          
+          //Enviar esta info al endpoint con post
+          fetch('/categoria/api/post/', {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getToken() //WIP
+            },
+            body: JSON.stringify(jsonData) 
+          })
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('mensaje').innerText = data.mensaje;
+            //cargar los categoria
+            cargarCategoria();
+          })
+          .catch(error => console.error('Error:', error));
+        });
+    
+        //Funcion para obtener el CSRFToken en js
+        function getToken(){
+          let cookieValue = null;
+          let cookies = document.cookie.split(';');
+          for(let i = 0; i < cookies.length; i++){
+            let cookie = cookies[i].trim();
+            if(cookie.startsWith('csrftoken=')){
+              cookieValue = cookie.substring("csrftoken=".length, cookie.length)
+              break;
+            }
+          }
+          return cookieValue;
+        }
+      </script>
+      <script>
+        function cargarCategoria() {
+            fetch('/categoria/api/get')
+            .then(response => response.json())
+            .then(data => {
+                let categoriaDiv = document.getElementById('categorias');
+                categoriaDiv.innerHTML = ''; // Limpiar contenido antes de agregar nuevos
+    
+                data.forEach(categoria => {
+                    categoriaDiv.innerHTML += `
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm">
+                                <img src="${categoria.imagen}" class="card-img-top img-fluid" alt="${categoria.nombre}">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${categoria.nombre}</h5>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        cargarCategoria();
+      </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
