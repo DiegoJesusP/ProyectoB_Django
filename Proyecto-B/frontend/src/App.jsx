@@ -44,10 +44,11 @@ function Home(){
     axios.get('http://127.0.0.1:8000/users/api/')
       .then((response) => {
         setData(response.data);
-        setLoading(false);
       })
       .catch((error) => {
         setError("Error al obtener los datos" + error);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -67,6 +68,11 @@ function Home(){
   };
 
   const handleDelete = (id) => {
+    if (!sesion) {
+      alert("No estás autenticado.");
+      return;
+    }
+
     if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
       axios
         .delete(`http://127.0.0.1:8000/users/api/${id}/`, {
@@ -118,8 +124,11 @@ function Home(){
           <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Correo Electrónico</th>
+            <th>Apellido</th>
             <th>Control Número</th>
+            <th>Edad</th>
+            <th>Teléfono</th>
+            <th>Correo Electrónico</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -128,8 +137,12 @@ function Home(){
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>{item.name}</td>
-              <td>{item.email}</td>
+              <td>{item.surname}</td>
               <td>{item.control_number}</td>
+              <td>{item.age}</td>
+              <td>{item.tel}</td>
+              <td>{item.email}</td>
+              
               <td>
                 <button
                   onClick={() => handleEditar(item)}
