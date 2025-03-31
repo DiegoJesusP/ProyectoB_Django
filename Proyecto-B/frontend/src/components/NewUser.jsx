@@ -18,7 +18,7 @@ const CustomUserForm = () => {
         axios
             .get("http://127.0.0.1:8000/users/form/")
             .then((response) => {
-                console.log(response.data); // Verifica que los datos se reciban correctamente
+                console.log(response.data);
                 setFormFields(response.data);
             })
             .catch((error) => console.error("Error al obtener los datos", error));
@@ -39,7 +39,7 @@ const CustomUserForm = () => {
                 headers: { "Content-Type": "application/json" },
             })
             .then((response) => {
-                alert(response.data.message); // Mensaje de éxito
+                alert(response.data.message);
             })
             .catch((error) => {
                 alert("Hubo un error al crear el usuario.");

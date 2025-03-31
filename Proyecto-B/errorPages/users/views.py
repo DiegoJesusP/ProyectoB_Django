@@ -27,6 +27,24 @@ class UserViewSets(viewsets.ModelViewSet):
         if self.request.method in ["POST", "PUT", "DELETE"]:
             return [IsAuthenticated()]
         return []
+    
+    def destroy(self, request, *args, **kwargs):
+        # Obtener el usuario que se va a eliminar
+        user = self.get_object()
+
+        # Obtener el usuario logueado
+        logged_in_user = request.user
+
+        # Verificar si el usuario está tratando de eliminar su propia cuenta
+        if user == logged_in_user:
+            # Generar una respuesta de error personalizada con el código de estado adecuado
+            return Response(
+                {"detail": "No puedes eliminar tu propio usuario."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Si no es el propio usuario, proceder con la eliminación
+        return super().destroy(request, *args, **kwargs)
 
 
 # Hacer una vista que me devuelva mi Token
