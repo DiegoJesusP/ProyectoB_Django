@@ -6,15 +6,19 @@ import Navbar from "./components/Navbar";
 import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/404";
 import { AnimatePresence } from "framer-motion";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import NewUser from "./components/NewUser.jsx";
 
 
 const AnimatedRoutes = () => {
-  const Location = useLocation();
+  const location = useLocation();
   return (
     <AnimatePresence mode="await">
       <Routes location={location} key={location.pathname}>
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/nuevo" element={<NewUser />} />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -26,6 +30,7 @@ function Home(){
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const sesion = localStorage.getItem('accessToken');
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/users/api/')
@@ -50,6 +55,7 @@ function Home(){
   return (
     <div>
       <h1>Datos de la api desde Django</h1>
+      <h2>Usuario: {sesion}</h2>
       <ul>
         {data.map((item) => (
           <li key={item.id}>{JSON.stringify(item)}</li>

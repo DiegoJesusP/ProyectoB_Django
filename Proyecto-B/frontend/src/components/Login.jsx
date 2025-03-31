@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { login } from "../services/authService";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Login = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const nav = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("Email:", email);  // Verifica que el valor sea el esperado
+    console.log("Password:", password);  // Verifica que la contraseña sea la correcta
     try {
-      await login(username, password);
-      onLoginSuccess();
+      await login(email, password);
+      nav("/");
     } catch (err) {
       setError("Credenciales incorrectas");
     }
@@ -39,8 +42,8 @@ const Login = ({ onLoginSuccess }) => {
                     type="text"
                     className="form-control"
                     placeholder="Ingrese su usuario"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 
