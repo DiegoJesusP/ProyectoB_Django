@@ -9,6 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import NewUser from "./components/NewUser.jsx";
+import EditUser from "./components/EditUser.jsx";
 
 
 const AnimatedRoutes = () => {
@@ -33,19 +34,37 @@ function Home(){
   const [successMessage, setSuccessMessage] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+
+  const [userEdit, setUserEdit] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
   const sesion = localStorage.getItem('accessToken');
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/users/api/')
-    .then((response) => {
-      setData(response.data);
-      setLoading(false);
-    })
-    .catch((error) => {
-      setError("Error al obtener los datos" + error);
-      setLoading(false);
-    });
+      .then((response) => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Error al obtener los datos" + error);
+        setLoading(false);
+      });
   }, []);
+
+  const handleEditar = (item) => {
+    setShowForm(true);
+    setUserEdit(item);
+  };
+
+  const handleSave = () => {
+    setShowForm(false);
+    setUserEdit(null);
+  };
+
+  const handleClose = () => {
+    setShowForm(false);
+  };
 
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
@@ -77,7 +96,7 @@ function Home(){
     setCurrentPage(pageNumber);
   };
 
-  if (loading){
+  if (loading) {
     return <div>Cargando...</div>;
   }
 
@@ -113,6 +132,12 @@ function Home(){
               <td>{item.control_number}</td>
               <td>
                 <button
+                  onClick={() => handleEditar(item)}
+                  className="btn btn-warning"
+                >
+                  Editar
+                </button>
+                <button
                   onClick={() => handleDelete(item.id)}
                   className="btn btn-danger"
                 >
@@ -123,6 +148,8 @@ function Home(){
           ))}
         </tbody>
       </table>
+
+      {showForm && <EditUser userEdit={userEdit} onSave={handleSave} handleClose={handleClose} />}
 
       {/* Paginación */}
       <nav aria-label="Page navigation">
